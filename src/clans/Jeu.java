@@ -916,4 +916,52 @@ public class Jeu {
         }
         return res;
     }
+    
+    public void scorer(int _case){
+            
+        if(villageCourant<12){
+            joueurs[joueurActif].newVillage(); 
+
+            
+            if ( plateau[_case].getType().equals(malus [villageCourant])){
+
+                villageAvecExplosion[nbVillageAvecExplosion] = _case;
+                nbVillageAvecExplosion ++;
+
+                plateau[_case].vider();
+             }else{
+                int i;
+                if(plateau[_case].cinqCouleurs()){
+                    int[]  _cabane;
+
+                    _cabane=plateau[_case].getCabanes();
+
+
+                    for (i=0;i<5;i++){
+                        if (_cabane[i]==1){
+                            plateau[_case].removeCabane(i);
+                        }
+                    }
+
+                 if(plateau[_case].getNbCabane()>1){
+
+                     for (i=0;i<5;i++){
+                             if(plateau[_case].getCabanes(i)>0){
+                                 score[i] += plateau[_case].getNbCabane();
+                                 if(plateau[_case].getType().equals(bonus [villageCourant])){
+                                    score[i] += ageCourant; 
+                                 }   
+                             }
+                     }
+                     villageCourant ++;
+                     plateau[_case].setVillage();
+
+                     ageCourant = age(villageCourant);
+                 }
+                 }
+
+
+             }
+        }
+    }
 }
