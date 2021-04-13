@@ -26,10 +26,10 @@ public class Strat21 implements Strategie {
 
     }
     Terrain[] plateau;
-    int compteur = 0;
-    int mycolor;
+    int mycolor; 
     int[] colorscore;
     int myscore;
+    int compteur = 0;
 
     @Override
     public int[] mouvement(Terrain[] _plateau, int _myColor, int[] _colorScore, int _myScore, int _opponentScore, int[] _opponentMov, int[] _opponentVillages) {
@@ -47,7 +47,7 @@ public class Strat21 implements Strategie {
             //System.out.println("Condition favorable");
             compteur += 1; // on est en condition favorable
         }
-        if (Tools.countVillage(_plateau) != 0) { //on remet à 0 le compteur dès que l'on crée un village
+        if (Tools.countVillage(_plateau) != 0) { //on remet à 0 le compteur dès que l'on crée un village ainsi on ne rentre pas dans la boucle qui va suivre une fois le village créé
             compteur = 0;
         }
         if (compteur > 0) {
