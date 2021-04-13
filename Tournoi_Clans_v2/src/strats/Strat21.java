@@ -2,7 +2,7 @@ package strats;
 
 import clans.Terrain;
 import java.util.Random;
-
+//TEST
 /**
  * Note (Anthony Fleury) : Cette strategie est a modifier et a adapter pour que
  * vous puissiez rendre la votre. Pour la modifier, avec le bouton droit, faite
