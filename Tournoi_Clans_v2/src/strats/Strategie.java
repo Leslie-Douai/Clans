@@ -42,4 +42,3 @@ public interface Strategie {
     public String getGroupe();
     
 }
-
