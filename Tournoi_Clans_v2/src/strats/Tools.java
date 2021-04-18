@@ -416,6 +416,16 @@ public class Tools {
         }
         return tableau;
     }
+    
+    public boolean cinqCouleurs(int[] _cabanes){
+        boolean res=true;
+        for(int i=0; i<5; i++)
+            if(_cabanes[i]==0)
+                res=false;      
+        return res;
+    }
+    
+  
 }
 
 
