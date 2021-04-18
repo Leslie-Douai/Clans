@@ -1,6 +1,6 @@
 # Clans
 
-Voici notre projet d'intelligence artificielle/Stratégie du jeu de société Clans
+##Voici notre projet d'intelligence artificielle/Stratégie du jeu de société Clans
 
 
 Groupe: 1
