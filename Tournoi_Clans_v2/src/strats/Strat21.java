@@ -120,6 +120,7 @@ public class Strat21 implements Strategie {
                             res[0] = sources[i];
                             res[1] = destinations[j];
                         }
+                        //si jamais on gagne le meme nombre de point on garde quand meme ce meilleur score pour garder les points creation villages
                         aucasou[0] = sources[i];
                         aucasou[1] = destinations[j];
                     }
