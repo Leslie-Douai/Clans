@@ -13,18 +13,18 @@ public class TournoiClans {
      */
     public static void main(String[] args) {        
         // Lance une partie entre deux strategies pour lesquelles vous donnez les numeros
-        //combatSimple(0, 2);
+        //combatSimple(8, 8);
         
         // lance un nombre defini de parties (troisieme parametres) entre deux strategies dont vous donnez le numero (deux premiers parametres)
-        combatMultiples(0, 21, 1000);
+        combatMultiples(3, 21, 1000);
 
         // Tournoi a 10000 parties par duels avec les strategies du tableau suivant:
         // Strategies des enseignants : 1, 2, 6 et 8. Attention 8 est tres gourmande en calcul donc limiter le nombre de parties...
-        //int strategies[] = {0, 1, 2, 3, 4, 6, 7, 8, 9};
+        //int strategies[] = {21, 1, 2, 3, 4, 6, 7, 8, 9};
         //lanceTournoi(strategies, 5);
 
         // Permet de jouer contre une strategie donnee, avec l'interface graphique.
-        //testStrat(0);
+        //testStrat(8);
     }
     
     public static void lanceTournoi(int[] strats, int n) {
