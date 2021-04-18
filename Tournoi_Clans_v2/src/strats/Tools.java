@@ -71,6 +71,7 @@ public class Tools {
     
     /**
      * 
+     * @param plateau
      * @param _terrain
      * @return un tableau contenant les voisins vers lequels on peut aller depuis une source
      */
@@ -175,6 +176,7 @@ public class Tools {
     
     /**
      * 
+     * @param plateau
      * @param _src
      * @param _dest
      * @param _village
@@ -257,8 +259,28 @@ public class Tools {
     }
     
     ///////////////////////////////////////////////////////////////////////////////
+    // Fonctions créées par nous 
+    
+    
     public static int[] cabanes_i(Terrain[] plateau, int i){ // récupére la liste des cabanes dans la case i
         return plateau[i].getCabanes();
+    }
+
+    
+    public static int nbpions_i(Terrain[] plateau, int i){ // récupére le nb de cabanes dans la case i
+        int somme=0;
+        int[] L= plateau[i].getCabanes();
+        //System.out.println(L.length);
+        for (int k=0;k<L.length;k++){
+            //System.out.println(L[k]);
+        }
+        //System.out.println("coucou");
+        for(int j=0;j<5;j++){
+            somme+=L[j];
+            //System.out.println(somme);
+        }
+        //System.out.println(somme);
+        return somme;
     }
     
     public static boolean est_vide(Terrain[] plateau, int i){ // regarde si la case i est vide
@@ -326,7 +348,10 @@ public class Tools {
 }
 
     /**
-     * @param comme mouvement
+     * @param _plateau
+     * @param _myColor
+     * @param _colorScore
+     * @param _myScore
      * @return return l'index de l'adversaire le plus fort en points
      */
     public static int worseOpp (Terrain [] _plateau, int _myColor, int [] _colorScore, int _myScore){
@@ -369,17 +394,23 @@ public class Tools {
                 compteur+=1;
             }
         }
-        int n=src.length-compteur;
-        int[] res = new int[n];
-        for (int i = 0; i < src.length; i++) {
-            if (getNbVoisinsNonVide(plateau, src[i]) == 2) {
-                res[index]=src[i];
-                index+=1;
-            }
+        if (compteur==0){
+            return src;
         }
-        
-      
-        return res;
+        else{
+            int n=src.length-compteur;
+            int[] res = new int[n];
+            for (int i = 0; i < src.length; i++) {
+                if (getNbVoisinsNonVide(plateau, src[i]) != 2) {
+                    res[index]=src[i];
+                    index+=1;
+
+                }
+            }
+             return res;
+        }
+       
+       
     }
     
      public static int fact (int n) {
@@ -416,15 +447,33 @@ public class Tools {
         }
         return tableau;
     }
+    public static int max(int[] L){
+        int max=0;
+        for (int i=0;i<L.length;i++){
+            if (L[i]>=max){
+                max=L[i];
+            }
+        }
+        return max;
+    }
     
-    public static boolean cinqCouleurs(int[] _cabanes){
+     public static boolean appartient (Terrain [] _plateau, int _myColor, int index){
+
+            
+            if (_plateau[index].getCabanes()[_myColor]!=0){
+                return true;
+            }
+            return false;
+    }
+     
+     public static boolean cinqCouleurs(int[] _cabanes){
         boolean res=true;
         for(int i=0; i<5; i++)
             if(_cabanes[i]==0)
-                res=false;      
+                res=false;
         return res;
     }
-    
+     
     public static int [] destru(Terrain[] _plateau, int _myColor, int[] _colorScore, int _myScore, int _opponentScore, int[] _opponentMov, int[] _opponentVillages, int nb){
         boolean present = false;
         int t=-1;
