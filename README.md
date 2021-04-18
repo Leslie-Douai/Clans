@@ -1,4 +1,4 @@
-# Clans
+# **Clans**
 
 ## Voici notre projet d'intelligence artificielle/Stratégie du jeu de société Clans
 
