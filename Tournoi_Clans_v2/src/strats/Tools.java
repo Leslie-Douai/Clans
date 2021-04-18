@@ -417,7 +417,7 @@ public class Tools {
         return tableau;
     }
     
-    public boolean cinqCouleurs(int[] _cabanes){
+    public static boolean cinqCouleurs(int[] _cabanes){
         boolean res=true;
         for(int i=0; i<5; i++)
             if(_cabanes[i]==0)
@@ -425,7 +425,73 @@ public class Tools {
         return res;
     }
     
-  
+    public static int [] destru(Terrain[] _plateau, int _myColor, int[] _colorScore, int _myScore, int _opponentScore, int[] _opponentMov, int[] _opponentVillages, int nb){
+        boolean present = false;
+        int t=-1;
+        int max = -1;
+        int[] imax ={ -1,-1};
+        
+        int[] srcDisp = getSource( _plateau);
+        for (int i =0;i<srcDisp.length;i++){
+            int [] villagecree = listeVillagesCreesSi( _plateau,srcDisp[i]);
+            for (int j = 0;j < villagecree.length;j++){
+                if(getNbVoisinDispo(_plateau,villagecree[j]) == 1 && malus[nb]==_plateau[villagecree[j]].getType()){
+                    if (max == -1){
+                        t =0;
+                        max = pnts_pot(_plateau,srcDisp[i],villagecree[j]);
+                        imax[0] = srcDisp[i];
+                        imax[1] = villagecree[j];
+                        
+                        present =(!(_plateau[villagecree[j]].getCabanes().clone()[_myColor]>0) && !( _plateau[srcDisp[i]].getCabanes().clone()[_myColor]>0 ));
+                                
+                    }else{
+                        boolean present_tempo = (!(_plateau[villagecree[j]].getCabanes().clone()[_myColor]>0) && !( _plateau[srcDisp[i]].getCabanes().clone()[_myColor]>0 ));
+                        
+                        if (present == true && present_tempo == false && t == 0){
+                            imax[0] = srcDisp[i];
+                            imax[1] = villagecree[j]; 
+                            present = present_tempo;
+                        }else{
+                            if (max < pnts_pot(_plateau,srcDisp[i],villagecree[j])){
+                                imax[0] = srcDisp[i];
+                                imax[1] = villagecree[j]; 
+                                present = present_tempo;
+                            }
+                        }
+                    }
+                    
+                   
+                }
+            }
+        }
+        
+        
+        return imax;
+        
+    }
+    
+    public static int pnts_pot(Terrain[] _plateau,int src,int dest){
+        int res = -1;
+        int[] cabanes =_plateau[dest].getCabanes().clone();
+        for (int i =0; i <5;i++){
+            cabanes[i] += _plateau[src].getCabanes().clone()[i];
+        }
+        
+        if (cinqCouleurs(cabanes)){
+            for (int i =0; i <5;i++){
+                if (cabanes[i] >1){
+                    res+=cabanes[i];
+                }                
+            }
+        }else {
+            for (int i =0; i <5;i++){
+                if (cabanes[i] >1){
+                    res+=cabanes[i];
+                }                
+            }
+        }
+        return res;
+    }
 }
 
 
