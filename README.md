@@ -6,6 +6,8 @@
 #### 
 #### D'autres méthodes ont été crées et testé (Empecher de jouer un coup offrant un village à l'adversaire, essayer de répéter un schéma de jeu plutot qu'un coup random...) mais on obtient de meilleurs résultats sans les utiliser.
 
+De la ligne 52 à 105, on a le code permettant d'appliquer un schéma tout fait au début de la partie, ce code est en commentaire car les résultats obtenus sont moins bon avec.
+
 ### Groupe: 1
 ### Équipe: 
 - Alexandre BERGER
