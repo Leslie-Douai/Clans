@@ -104,55 +104,54 @@ public class Strat21 implements Strategie {
 
             return destruction;
         }else{
-            int max = 0; // variable permettant de stocker le nombre de points maximal que pourrait rapporter un potentiel mouvement
-            for (int i = 0; i < sources.length; i++) {
-                int[] villages_si = Tools.listeVillagesCreesSi(_plateau, sources[i]);
-                if (villages_si.length != 0) {
-                    int[] destinations = Tools.getVoisinsDispo(_plateau, sources[i]);
-                    for (int j = 0; j < destinations.length; j++) {
-                        int[] gains = Tools.evaluerGain(_plateau, sources[i], destinations[j], ordre(villages_si)); // on évalue les potentiels gains de chaque couleur en jouant depuis la source i vers la destination j en suivant un ordre prècis dans le cas où on créerait plusieurs villages simultanément
-                        if (gains[_myColor] >= max) {
-                            if (gains[suppOpp] <= gains[_myColor]) {  // si le joueur que l'on suppose être notre ennemi gagne plus de points que nous sur ce coup là que nous on joue pas
-                                max = gains[_myColor];
-                                res[0] = sources[i];
-                                res[1] = destinations[j];
-                            }
+        int max = 0; // variable permettant de stocker le nombre de points maximal que pourrait rapporter un potentiel mouvement
+        for (int i = 0; i < sources.length; i++) {
+            int[] villages_si = Tools.listeVillagesCreesSi(_plateau, sources[i]);
+            if (villages_si.length != 0) {
+                int[] destinations = Tools.getVoisinsDispo(_plateau, sources[i]);
+                for (int j = 0; j < destinations.length; j++) {
+                    int[] gains = Tools.evaluerGain(_plateau, sources[i], destinations[j], ordre(villages_si)); // on évalue les potentiels gains de chaque couleur en jouant depuis la source i vers la destination j en suivant un ordre prècis dans le cas où on créerait plusieurs villages simultanément
+                    if (gains[_myColor] >= max) {
+                        if (gains[suppOpp] <= gains[_myColor]) {  // si le joueur que l'on suppose être notre ennemi gagne plus de points que nous sur ce coup là que nous on joue pas
+                            max = gains[_myColor];
+                            res[0] = sources[i];
+                            res[1] = destinations[j];
                         }
                     }
-                    if (Tools.coupValide(_plateau, res[0], res[1])) {
-                        return res;
-                    }
+                }
+                if (Tools.coupValide(_plateau, res[0], res[1])) {
+                    return res;
                 }
             }
+        }
 
-            for (int i = 0; i < sources.length; i++) {
-                if ((Tools.cabanes_i(_plateau, sources[i])[_myColor] == 2) && (Tools.type(_plateau, sources[i]).equals(bonus))) { //On regarde si on a au moins 2 pions dans un territoire favorable
-                    int[] vois1 = Tools.getVoisinsDispo(_plateau, sources[i]);
-                    for (int j = 0; j < vois1.length; j++) {
-                        if (Tools.appartient(_plateau, suppOpp, vois1[j])) { // si notre adversaire supposé est voisin de ce territoire, on va essayer de l'éloigner de ce territoire pour qu'il ne marque pas de points
-                            int n = Tools.getNbVoisinDispo(_plateau, vois1[j]);
-                            if (n > 0) {
-                                int[] vois2 = Tools.getVoisinsDispo(_plateau, vois1[j]);
-                                res[0] = vois1[j];
-                                res[1] = vois2[0];
-                                if (Tools.coupValide(_plateau, res[0], res[1])) {
-                                    return res;
-                                }
-
-                            }
-                        } else { //sinon on essaye de créer un village en rentrant les voisins dans ce territoire et ainsi on marque plus de points car il y a plus de cabanes
+        for (int i = 0; i < sources.length; i++) {
+            if ((Tools.cabanes_i(_plateau, sources[i])[_myColor] == 2) && (Tools.type(_plateau, sources[i]).equals(bonus))) { //On regarde si on a au moins 2 pions dans un territoire favorable
+                int[] vois1 = Tools.getVoisinsDispo(_plateau, sources[i]);
+                for (int j = 0; j < vois1.length; j++) {
+                    if (Tools.appartient(_plateau, suppOpp, vois1[j])) { // si notre adversaire supposé est voisin de ce territoire, on va essayer de l'éloigner de ce territoire pour qu'il ne marque pas de points
+                        int n = Tools.getNbVoisinDispo(_plateau, vois1[j]);
+                        if (n > 0) {
+                            int[] vois2 = Tools.getVoisinsDispo(_plateau, vois1[j]);
                             res[0] = vois1[j];
-                            res[1] = sources[i];
+                            res[1] = vois2[0];
                             if (Tools.coupValide(_plateau, res[0], res[1])) {
                                 return res;
                             }
 
                         }
+                    } else { //sinon on essaye de créer un village en rentrant les voisins dans ce territoire et ainsi on marque plus de points car il y a plus de cabanes
+                        res[0] = vois1[j];
+                        res[1] = sources[i];
+                        if (Tools.coupValide(_plateau, res[0], res[1])) {
+                            return res;
+                        }
+
                     }
                 }
             }
         }
-        
+                
 
         // si jamais on est pas dans les conditions précèdentes on va jouer un coup aléatoire
         
