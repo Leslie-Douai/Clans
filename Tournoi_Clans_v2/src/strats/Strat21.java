@@ -2,9 +2,7 @@ package strats;
 
 import clans.Terrain;
 import java.util.Random;
-//TEST
-//
-// coucou
+
 /**
  * Note (Anthony Fleury) : Cette strategie est a modifier et a adapter pour que
  * vous puissiez rendre la votre. Pour la modifier, avec le bouton droit, faite
@@ -46,7 +44,7 @@ public class Strat21 implements Strategie {
 
         int worse = Tools.suppOpp(_plateau, _myColor, _opponentVillages, _myScore);
         int[] sources = Tools.getSource(_plateau); //récupère la liste des sources 
-
+        /*
         int max = 0;
         for (int i = 0; i < sources.length; i++) {
             int[] villages_si = Tools.listeVillagesCreesSi(_plateau, sources[i]);
@@ -86,6 +84,7 @@ public class Strat21 implements Strategie {
         if (Tools.coupValide(_plateau, res[0], res[1])) {
             return res;
         }
+        */
         
         int nbChoix = Tools.getNbSourceValide(_plateau);                          //on récupère le nb de source valide     
         int src = Tools.getSource(_plateau)[rand.nextInt(nbChoix)];               //on en tire une aléatoirement      
