@@ -2,7 +2,7 @@
 
 ## Voici notre projet d'intelligence artificielle/Stratégie du jeu de société Clans
 
-#### Ajouterune description de l'IA
+#### Ajouter une description de l'IA
 
 ### Groupe: 1
 ### Équipe: 
