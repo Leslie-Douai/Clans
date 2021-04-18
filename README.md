@@ -6,5 +6,5 @@
 ### Groupe: 1
 ### Équipe: 
 - Alexandre BERGER
-- Leslie Rineau
+- Leslie RINEAU
 - Gabriel HARIVEL
