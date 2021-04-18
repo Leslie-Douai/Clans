@@ -42,6 +42,7 @@ public class Strat21 implements Strategie {
         /////////////////
         // méthode qui va décider quoi faire tant que le premier village n'est pas créé
         // si le nombre de villages créés est 0 et on a un pion en case 19 ou en case 50
+        
         int[] cabanes19 = Tools.cabanes_i(_plateau, 19); // liste des cabanes dans la case 19
         int[] cabanes50 = Tools.cabanes_i(_plateau, 50); // liste des cabanes dans la case 50
         if (Tools.countVillage(_plateau) == 0 && (cabanes19[_myColor] != 0 || cabanes50[_myColor] != 0)) {
@@ -92,7 +93,7 @@ public class Strat21 implements Strategie {
                 }
             }
         }
-
+        
         ////////////////////
         int nb = Tools.countVillage(_plateau);
         // Méthode décidant de quoi faire de manière générale 
@@ -101,13 +102,18 @@ public class Strat21 implements Strategie {
             int[] aucasou = {0, 0};
             //int worse=Tools.worseOpp(_plateau, _myColor, _colorScore, _myScore);
             int worse = Tools.suppOpp(_plateau, _myColor, _opponentVillages, _myScore);
+            
             int[] sources = Tools.getSource(_plateau); //récupère la liste des sources
             for (int i = 0; i < sources.length; i++) {
+                //Liste des villages créés si on choisi de bouger cette case
                 int[] villages_si = Tools.listeVillagesCreesSi(_plateau, sources[i]);
-                
+                //Liste des endroits où peut allez le/les huttes de la case
                 int[] destinations = Tools.getVoisinsDispo(_plateau, sources[i]);
+                //on parcourt les destinations possibles
                 for (int j = 0; j < destinations.length; j++) {
+                    //Pour chaque dest de la case source on regarde le nombre de points possibles
                     int[] gains = Tools.evaluerGain(_plateau, sources[i], destinations[j], ordre(villages_si));
+                    //Si on gagne le plus de score de tous ce qui a été test
                     if (gains[_myColor] >= max) {
                         if (gains[worse] <= gains[_myColor]) {  // si le joueur avec le plus gros score a un plus gros gain que nous on joue pas
                             max = gains[_myColor];
