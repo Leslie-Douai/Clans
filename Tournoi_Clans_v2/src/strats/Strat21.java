@@ -33,6 +33,7 @@ public class Strat21 implements Strategie {
 
     @Override
     public int[] mouvement(Terrain[] _plateau, int _myColor, int[] _colorScore, int _myScore, int _opponentScore, int[] _opponentMov, int[] _opponentVillages) {
+       
         int[] res = new int[2];
         plateau = _plateau;
         mycolor = _myColor;
@@ -135,6 +136,7 @@ public class Strat21 implements Strategie {
         res[0] = src;
         res[1] = dest;
         return res;
+       
     }
 
     @Override
