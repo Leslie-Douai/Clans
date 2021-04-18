@@ -21,87 +21,106 @@ public class Strat21 implements Strategie {
     public Strat21() {
         super();
         rand = new Random();
-        int compteur;
-
     }
+    // on recr�e certaines variables pour pouvoir les utliser dans ordre
     Terrain[] plateau;
     int mycolor;
     int[] colorscore;
     int myscore;
-    int compteur = 0;
 
     @Override
     public int[] mouvement(Terrain[] _plateau, int _myColor, int[] _colorScore, int _myScore, int _opponentScore, int[] _opponentMov, int[] _opponentVillages) {
-        
-        int[] res = new int[2];
+        int[] res = new int[2]; //tableau que l'on va retourner en sortie de mouvement 
+        // on stock les informations de certaines variables pour pouvoir les utliser dans l'ordre
         plateau = _plateau;
         mycolor = _myColor;
         colorscore = _colorScore;
         myscore = _myScore;
-        int nb = Tools.countVillage(_plateau);
-        String bonus = Tools.bonus[nb];
-        String malus = Tools.malus[nb];
-
-        int worse = Tools.suppOpp(_plateau, _myColor, _opponentVillages, _myScore);
-        int[] sources = Tools.getSource(_plateau); //r�cup�re la liste des sources 
-        
-        int [] destruction = Tools.destru( _plateau,_myColor,_colorScore,_myScore,_opponentScore,_opponentMov, _opponentVillages,nb);
-        if ( destruction[0] != -1){
-            return destruction;
-        }else{
-        
-        
-            int max = 0;
-            for (int i = 0; i < sources.length; i++) {
-                int[] villages_si = Tools.listeVillagesCreesSi(_plateau, sources[i]);
-                if (villages_si.length != 0) {
-                    int[] destinations = Tools.getVoisinsDispo(_plateau, sources[i]);
-                    for (int j = 0; j < destinations.length; j++) {
-                        int[] gains = Tools.evaluerGain(_plateau, sources[i], destinations[j], ordre(villages_si));
-                        if (gains[_myColor] >= max) {
-                            if (gains[worse] <= gains[_myColor]) {  // si le joueur avec le plus gros score a un plus gros gain que nous on joue pas
-                                max = gains[_myColor];
-                                res[0] = sources[i];
-                                res[1] = destinations[j];
-                            }
+        int nb = Tools.countVillage(_plateau); // nombre de villages cr��s au moment du mouvement
+        String bonus = Tools.bonus[nb]; //terrain qui rapporte un bonus au moment du mouvement
+        String malus = Tools.malus[nb]; //terrain qui rapporte un malus au moment du mouvement
+        int suppOpp = Tools.suppOpp(_plateau, _myColor, _opponentVillages, _myScore); // couleur de l'adversaire suppos�
+        int[] sources = Tools.getSource(_plateau); //liste des sources disponibles
+        int max = 0; // variable permettant de stocker le nombre de points maximal que pourrait rapporter un potentiel mouvement
+        for (int i = 0; i < sources.length; i++) {
+            int[] villages_si = Tools.listeVillagesCreesSi(_plateau, sources[i]);
+            if (villages_si.length != 0) {
+                int[] destinations = Tools.getVoisinsDispo(_plateau, sources[i]);
+                for (int j = 0; j < destinations.length; j++) {
+                    int[] gains = Tools.evaluerGain(_plateau, sources[i], destinations[j], ordre(villages_si)); // on �value les potentiels gains de chaque couleur en jouant depuis la source i vers la destination j en suivant un ordre pr�cis dans le cas o� on cr�erait plusieurs villages simultan�ment
+                    if (gains[_myColor] >= max) {
+                        if (gains[suppOpp] <= gains[_myColor]) {  // si le joueur que l'on suppose �tre notre ennemi gagne plus de points que nous sur ce coup l� que nous on joue pas
+                            max = gains[_myColor];
+                            res[0] = sources[i];
+                            res[1] = destinations[j];
                         }
                     }
-                    if (Tools.coupValide(_plateau, res[0], res[1])) {
-                        //System.out.println("1ere sol");
-                        return res;
-                    }
+                }
+                if (Tools.coupValide(_plateau, res[0], res[1])) {
+                    return res;
                 }
             }
-
-            //System.out.println("2e solution"+Tools.age(nb));
-            for (int i = 0; i < sources.length; i++) {
-
-                if ((Tools.cabanes_i(_plateau, i)[_myColor] == 2) && (Tools.type(_plateau, sources[i]).equals(bonus))) { //On isole un terrain o� on est bien 
-                    int[] vois1 = Tools.getVoisinsDispo(_plateau, i);
-                    for (int j = 0; j < vois1.length; j++) {
+        }
+        
+        for (int i = 0; i < sources.length; i++) {
+            if ((Tools.cabanes_i(_plateau, sources[i])[_myColor] == 2) && (Tools.type(_plateau, sources[i]).equals(bonus))) { //On regarde si on a au moins 2 pions dans un territoire favorable
+                int[] vois1 = Tools.getVoisinsDispo(_plateau, sources[i]);
+                for (int j = 0; j < vois1.length; j++) {
+                    if (Tools.appartient(_plateau, suppOpp, vois1[j])) { // si notre adversaire suppos� est voisin de ce territoire, on va essayer de l'�loigner de ce territoire pour qu'il ne marque pas de points
                         int n = Tools.getNbVoisinDispo(_plateau, vois1[j]);
                         if (n > 0) {
                             int[] vois2 = Tools.getVoisinsDispo(_plateau, vois1[j]);
                             res[0] = vois1[j];
                             res[1] = vois2[0];
+                            if (Tools.coupValide(_plateau, res[0], res[1])) {
+                                return res;
+                            }
+
                         }
+                    } else { //sinon on essaye de cr�er un village en rentrant les voisins dans ce territoire et ainsi on marque plus de points car il y a plus de cabanes
+                        res[0] = vois1[j];
+                        res[1] = sources[i];
+                        if (Tools.coupValide(_plateau, res[0], res[1])) {
+                            return res;
+                        }
+
                     }
                 }
             }
-            if (Tools.coupValide(_plateau, res[0], res[1])) {
-                return res;
-            }
-            
         }
-        if (Tools.coupValide(_plateau, res[0], res[1])) {
-            return res;
+        
+        for (int i = 0; i < sources.length; i++) {
+            if ((Tools.cabanes_i(_plateau, sources[i])[_myColor] == 2) && (Tools.type(_plateau, sources[i]).equals(bonus))) { //On regarde si on a au moins 2 pions dans un territoire favorable
+                int[] vois1 = Tools.getVoisinsDispo(_plateau, sources[i]);
+                for (int j = 0; j < vois1.length; j++) {
+                    if (Tools.appartient(_plateau, suppOpp, vois1[j])) { // si notre adversaire suppos� est voisin de ce territoire, on va essayer de l'�loigner de ce territoire pour qu'il ne marque pas de points
+                        int n = Tools.getNbVoisinDispo(_plateau, vois1[j]);
+                        if (n > 0) {
+                            int[] vois2 = Tools.getVoisinsDispo(_plateau, vois1[j]);
+                            res[0] = vois1[j];
+                            res[1] = vois2[0];
+                            if (Tools.coupValide(_plateau, res[0], res[1])) {
+                                return res;
+                            }
+
+                        }
+                    } else { //sinon on essaye de cr�er un village en rentrant les voisins dans ce territoire et ainsi on marque plus de points car il y a plus de cabanes
+                        res[0] = vois1[j];
+                        res[1] = sources[i];
+                        if (Tools.coupValide(_plateau, res[0], res[1])) {
+                            return res;
+                        }
+
+                    }
+                }
+            }
         }
         
         
         
 
-        //System.out.println("3e solution"+Tools.age(nb));
-        //System.out.println("coup random"+Tools.age(nb));
+        // si jamais on est pas dans les conditions pr�c�dentes on va jouer un coup al�atoire
+        
         int nbChoix = Tools.getNbSourceValide(_plateau);                          //on r�cup�re le nb de source valide     
         int src = Tools.getSource(_plateau)[rand.nextInt(nbChoix)];               //on en tire une al�atoirement      
         int nbVoisin = Tools.getNbVoisinDispo(_plateau, src);                       //on r�cup�re le nb de voisins de la source
@@ -115,19 +134,18 @@ public class Strat21 implements Strategie {
 
     @Override
     public int[] ordre(int[] _villages) {
+
         /*
         int nbvillage = Tools.countVillage(plateau); // nombre de villages cr��s
         if (_villages.length>1 && nbvillage<9 ){
             int[][] combinaison_villages = Tools.combinaisons(_villages); // liste de tte les combinaisons pouvant �tre faites avec les villages
-            int[] points = new int[combinaison_villages.length];   // liste des points que rapporte chaque combinaison
-            for (int i = 0; i < combinaison_villages.length; i++) { // on parcourt l'ensemble des combinaisons
-                int[] combinaison_i = combinaison_villages[i]; // on stock ici la combinaison i
-                String[] bonus = new String[combinaison_i.length+4]; // on cr�e la liste des bonus associ�s � la combinaison i
+        
+        int nbvillage = Tools.countVillage(plateau); // nombre de villages cr��s
+        if (_villages.length>1 && nbvillage<9 ){
                 String[] malus = new String[combinaison_i.length+4]; // on cr�e la liste des malus associ�s � la combinaison i
                 
             
                 for (int j = 0; j < combinaison_i.length; j++) { // on parcourt la combinaison i
-                    bonus[j] = Tools.bonus[nbvillage + j]; // on remplit ces listes
                     malus[j] = Tools.malus[nbvillage + j];
                     
                 }
@@ -163,6 +181,9 @@ public class Strat21 implements Strategie {
         }
         else {
          */
+
+         
+
         Random rand = new Random();
         int a, tmp;
         // on melange le tableau des villages
@@ -171,18 +192,22 @@ public class Strat21 implements Strategie {
             tmp = _villages[a];
             _villages[a] = _villages[i];
             _villages[i] = tmp;
-        }
+        
+
+        
+
         //on retourne le tableau m�lang�
         return _villages;
+        }
     }
-    //}
+
 
     public String getName() {
         return "Alexandre";
     }
 
     public String getGroupe() {
-        return "strat�gie 21";
+        return "stratégie 21";
     }
 
 }
