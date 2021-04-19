@@ -11,9 +11,9 @@
 #### 
 #### De la ligne 46 à 49, on regarde si on peut détruire un village, cela nous avantage car nous gagnons le point de création du village.
 #### De la ligne 52 à 105, on a le code permettant d'appliquer un schéma tout fait au début de la partie
-#### De la ligne 106 à 161 on s'intéresse à la stratégie à adopter lors du coup final 
-#### De la ligne 163 à 188 c'est le bloc principal de notre stratégie , on regarde tous les coups possibles et si l'un d'entre eux nous avantage par rapport à la couleur que l'on suppose être notre opposant, on le joue
-#### De la ligne 190 à 215 on regarde si on a au moins 2 pions dans un territoire favorable, si notre adversaire supposé est voisin de ce territoire, on va essayer de l'éloigner de ce territoire pour qu'il ne marque pas de points, sinon on essaye de créer un village en déplacant les voisins de ce territoire favorable dans ce terrain favorable
+#### De la ligne 106 à 140  On s'intéresse à la stratégie à adopter lors du coup final 
+#### De la ligne 142 à 161 c'est le bloc principal de notre stratégie , on regarde tous les coups possibles et si l'un d'entre eux nous avantage par rapport à la couleur que l'on suppose être notre opposant, on le joue
+#### De la ligne 163 à 188 on regarde si on a au moins 2 pions dans un territoire favorable, si notre adversaire supposé est voisin de ce territoire, on va essayer de l'éloigner de ce territoire pour qu'il ne marque pas de points, sinon on essaye de créer un village en déplacant les voisins de ce territoire favorable dans ce terrain favorable
 #### De la ligne 190 à 215 on regarde si 0 pions dans un territoire défavorable, si on est voisin de ce territoire défavorable, on va essayer de s'éloigner de ce territoiren,sinon on essaye de créer un village en rentrant les voisins dans ce territoire et ainsi on élimine des pions adverses
 #### De la ligne 217 à 227 si on est dans aucun des cas précent, on joue un coup aléatoire
 #### De la ligne 200 à 248 on fait une liste de toutes les manières d'ordonner les villages, on établit une liste de points que rapporte chaque combinaison, ces points sont basés sur nos critères
