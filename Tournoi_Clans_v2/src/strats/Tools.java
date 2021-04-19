@@ -14,11 +14,11 @@ public class Tools {
     static final String[] malus = {"montagne", "montagne", "montagne", "montagne", "plaine", "plaine", "plaine", "foret", "foret", "champ", "champ", "rien"};
 
     /**
-     * 
+     *
      * @param plateau Le plateau de jeu
      * @return le nombre de source valide
      */
-    public static int getNbSourceValide( Terrain [] plateau ) {
+    public static int getNbSourceValide(Terrain[] plateau) {
         int res = 0;
         for (int i = 0; i < 60; i++) {
             if (!plateau[i].estBloque() && !plateau[i].estVide() && !plateau[i].getVillage()) {
@@ -27,13 +27,13 @@ public class Tools {
         }
         return res;
     }
-    
+
     /**
-     * 
+     *
      * @param plateau Le plateau de jeu
      * @return les differentes sources possibles.
      */
-    public static int[] getSource( Terrain [] plateau ) {
+    public static int[] getSource(Terrain[] plateau) {
         int[] res;
         int nbSourceValide = getNbSourceValide(plateau);
         res = new int[nbSourceValide];
@@ -52,30 +52,32 @@ public class Tools {
      * @param _terrain Le numero du terrain
      * @return le nombre de voisins vers lequels on peut aller depuis une source
      */
-    public static int getNbVoisinDispo( Terrain [] plateau, int _terrain) {
+    public static int getNbVoisinDispo(Terrain[] plateau, int _terrain) {
         int res = 0;
         Terrain tmp;
         for (int i = 0; i < plateau[_terrain].getNbVoisins(); i++) {
             tmp = plateau[plateau[_terrain].getVoisin(i)];
             if (plateau[_terrain].getNbCabane() < 7) {
-                if (!tmp.estVide())
-                    res++;             
-            }
-            else {
-                if (!tmp.estVide() && tmp.getNbCabane() >= plateau[_terrain].getNbCabane())
+                if (!tmp.estVide()) {
                     res++;
+                }
+            } else {
+                if (!tmp.estVide() && tmp.getNbCabane() >= plateau[_terrain].getNbCabane()) {
+                    res++;
+                }
             }
         }
         return res;
     }
-    
+
     /**
-     * 
+     *
      * @param plateau
      * @param _terrain
-     * @return un tableau contenant les voisins vers lequels on peut aller depuis une source
+     * @return un tableau contenant les voisins vers lequels on peut aller
+     * depuis une source
      */
-    public static int[] getVoisinsDispo(Terrain [] plateau, int _terrain) {
+    public static int[] getVoisinsDispo(Terrain[] plateau, int _terrain) {
         int[] res;
         int nbVoisinDispo = getNbVoisinDispo(plateau, _terrain);
         res = new int[nbVoisinDispo];
@@ -88,8 +90,7 @@ public class Tools {
                     res[acc] = plateau[_terrain].getVoisin(i);
                     acc++;
                 }
-            }
-            else {
+            } else {
                 if (!tmp.estVide() && tmp.getNbCabane() >= plateau[_terrain].getNbCabane()) {
                     res[acc] = plateau[_terrain].getVoisin(i);
                     acc++;
@@ -98,133 +99,143 @@ public class Tools {
         }
         return res;
     }
-    
-    
+
     /**
-     * 
+     *
      * @param plateau
      * @param _src
      * @return le nombre de villages créés si vous jouez depuis la source "_src"
      */
-    public static int nbVillageCreeSi(Terrain [] plateau, int _src){
-        int res=0;
+    public static int nbVillageCreeSi(Terrain[] plateau, int _src) {
+        int res = 0;
         int v;
-        for (int i=0; i<plateau[_src].getNbVoisins(); i++){
-            v=plateau[_src].getVoisin(i);
-            if((!plateau[v].estVide()) && ( getNbVoisinsNonVide(plateau, v) == 1 )){
+        for (int i = 0; i < plateau[_src].getNbVoisins(); i++) {
+            v = plateau[_src].getVoisin(i);
+            if ((!plateau[v].estVide()) && (getNbVoisinsNonVide(plateau, v) == 1)) {
                 res++;
-            } 
-        }        
+            }
+        }
         return res;
     }
-    
-        /**
-     * 
+
+    /**
+     *
      * @param plateau
      * @param _terrain
      * @return le nombre de voisins non vides d'un terrain
      */
     public static int getNbVoisinsNonVide(Terrain[] plateau, int _terrain) {
-        int res=0;
-        for(int i=0; i< plateau[_terrain].getNbVoisins(); i++){
-            if(!plateau[ plateau[_terrain].getVoisin(i) ].estVide())
+        int res = 0;
+        for (int i = 0; i < plateau[_terrain].getNbVoisins(); i++) {
+            if (!plateau[plateau[_terrain].getVoisin(i)].estVide()) {
                 res++;
+            }
         }
         return res;
     }
-    
+
     /**
-     * 
+     *
      * @param plateau
      * @param _src
      * @param _dest
      * @param _ordre
-     * @return caclcul les scores si vous jouez depuis la source "_src" vers la destination "_dest" avec un ordre "_ordre" de création de villages (si nécessaire)
+     * @return caclcul les scores si vous jouez depuis la source "_src" vers la
+     * destination "_dest" avec un ordre "_ordre" de création de villages (si
+     * nécessaire)
      */
-    public static int[] evaluerGain(Terrain [] plateau, int _src, int _dest, int[] _ordre){
-        int[] res= {0, 0, 0, 0, 0};
-        int nbVillage= nbVillageCreeSi(plateau, _src);
+    public static int[] evaluerGain(Terrain[] plateau, int _src, int _dest, int[] _ordre) {
+        int[] res = {0, 0, 0, 0, 0};
+        int nbVillage = nbVillageCreeSi(plateau, _src);
         int[] tmp;
 
-        if(nbVillage>0){
+        if (nbVillage > 0) {
             //on compte additionne les score pour chaque village
-            for(int i=0; i < nbVillage; i++){
-                tmp= scoreVillage( plateau, _src, _dest, _ordre[i], i); // décalage dépend de nbvillage
-                for (int j=0; j<5; j++){
-                    res[j]+=tmp[j];
+            for (int i = 0; i < nbVillage; i++) {
+                tmp = scoreVillage(plateau, _src, _dest, _ordre[i], i); // décalage dépend de nbvillage
+                for (int j = 0; j < 5; j++) {
+                    res[j] += tmp[j];
                 }
             }
-        }               
-        return res;       
+        }
+        return res;
     }
-    
+
     /**
-     * 
+     *
      * @param plateau
      * @return compte le nombre de villagee sur le plateau
      */
-    public static int countVillage ( Terrain [] plateau ){
-        int nbVillage= 0;
-        
-        for ( int i= 0 ; i < plateau.length ; ++i ){
-            if ( plateau[i].getVillage() ){
-                nbVillage+= 1;
+    public static int countVillage(Terrain[] plateau) {
+        int nbVillage = 0;
+
+        for (int i = 0; i < plateau.length; ++i) {
+            if (plateau[i].getVillage()) {
+                nbVillage += 1;
             }
         }
         return nbVillage;
     }
-    
+
     /**
-     * 
+     *
      * @param plateau
      * @param _src
      * @param _dest
      * @param _village
      * @param decalage
-     * @return calcul les points gagnés par le village "_village" créé avec un décalage "decalage" si vous jouez depuis la source "_src" vers la destination "_dest"
+     * @return calcul les points gagnés par le village "_village" créé avec un
+     * décalage "decalage" si vous jouez depuis la source "_src" vers la
+     * destination "_dest"
      */
-    public static int[] scoreVillage(Terrain [] plateau, int _src, int _dest, int _village, int decalage){
-        int[] res=new int[5];
+    public static int[] scoreVillage(Terrain[] plateau, int _src, int _dest, int _village, int decalage) {
+        int[] res = new int[5];
         int[] cabanes;
-        int points=0;
-        int villageCourant= countVillage(plateau);
+        int points = 0;
+        int villageCourant = countVillage(plateau);
 
         //Test destruction
-        if( (villageCourant + decalage) < malus.length ){
-            if( !plateau[_village].getType().equals( malus[villageCourant + decalage] )){
-                cabanes=plateau[_village].getCabanes().clone();
-                if(_dest==_village){
-                    for(int i=0; i<5; i++){
-                        cabanes[i]+=plateau[_src].getCabanes(i);
+        if ((villageCourant + decalage) < malus.length) {
+            if (!plateau[_village].getType().equals(malus[villageCourant + decalage])) {
+                cabanes = plateau[_village].getCabanes().clone();
+                if (_dest == _village) {
+                    for (int i = 0; i < 5; i++) {
+                        cabanes[i] += plateau[_src].getCabanes(i);
                     }
                 }
-                if( cabanes[0] > 0 &&  cabanes[1] > 0 && cabanes[2] > 0 
-                        && cabanes[3] > 0 && cabanes[4] > 0 ){
-                    for(int i=0; i<5; i++){
-                        if( cabanes[i] == 1 )
-                            cabanes[i]= 0;
+                if (cabanes[0] > 0 && cabanes[1] > 0 && cabanes[2] > 0
+                        && cabanes[3] > 0 && cabanes[4] > 0) {
+                    for (int i = 0; i < 5; i++) {
+                        if (cabanes[i] == 1) {
+                            cabanes[i] = 0;
+                        }
                     }
                 }
-                for( int i=0; i<5; i++ )
-                    points+=cabanes[i];
-                
-                if(plateau[_village].getType().equals(bonus[villageCourant + decalage]))
-                    points+= age( villageCourant+decalage );
-                
-                for(int i=0; i<5; i++)
-                    if(cabanes[i]>0)
-                        res[i]=points;
+                for (int i = 0; i < 5; i++) {
+                    points += cabanes[i];
+                }
+
+                if (plateau[_village].getType().equals(bonus[villageCourant + decalage])) {
+                    points += age(villageCourant + decalage);
+                }
+
+                for (int i = 0; i < 5; i++) {
+                    if (cabanes[i] > 0) {
+                        res[i] = points;
+                    }
+                }
             }
         }
         return res;
     }
 
     /**
-     * 
+     *
      * @param _nb
-     * @return l'age dans lequel on se situerai apres la creation de "_nb" villages
+     * @return l'age dans lequel on se situerai apres la creation de "_nb"
+     * villages
      */
-    public static int age(int _nb){
+    public static int age(int _nb) {
         int res = 1;
         if (_nb > 10) {
             res = 5;
@@ -239,113 +250,101 @@ public class Tools {
     }
 
     /**
-     * 
+     *
      * @param plateau
      * @param _src
-     * @return le tableau des villages créés si vous jouez depuis la source "_src"
+     * @return le tableau des villages créés si vous jouez depuis la source
+     * "_src"
      */
-    public static int[] listeVillagesCreesSi( Terrain [] plateau, int _src){
-        int[] res= new int[nbVillageCreeSi(plateau, _src)];
+    public static int[] listeVillagesCreesSi(Terrain[] plateau, int _src) {
+        int[] res = new int[nbVillageCreeSi(plateau, _src)];
         int v;
-        int cpt=0;
-        for (int i=0; i<plateau[_src].getNbVoisins(); i++){
-            v=plateau[_src].getVoisin(i);
-            if( (!plateau[v].estVide()) && (getNbVoisinsNonVide(plateau, v)==1) ){
-                res[cpt]=v;
+        int cpt = 0;
+        for (int i = 0; i < plateau[_src].getNbVoisins(); i++) {
+            v = plateau[_src].getVoisin(i);
+            if ((!plateau[v].estVide()) && (getNbVoisinsNonVide(plateau, v) == 1)) {
+                res[cpt] = v;
                 cpt++;
-            } 
-        }        
+            }
+        }
         return res;
     }
-    
+
     ///////////////////////////////////////////////////////////////////////////////
     // Fonctions créées par nous 
-    
-    
-    public static int[] cabanes_i(Terrain[] plateau, int i){ // récupére la liste des cabanes dans la case i
+    public static int[] cabanes_i(Terrain[] plateau, int i) { // récupére la liste des cabanes dans la case i
         return plateau[i].getCabanes();
     }
 
-    
-    public static int nbpions_i(Terrain[] plateau, int i){ // récupére le nb de cabanes dans la case i
-        int somme=0;
-        int[] L= plateau[i].getCabanes();
-        //System.out.println(L.length);
-        for (int k=0;k<L.length;k++){
-            //System.out.println(L[k]);
+    public static int nbpions_i(Terrain[] plateau, int i) { // récupére le nb de cabanes dans la case i
+        int somme = 0;
+        int[] L = plateau[i].getCabanes();
+        for (int k = 0; k < L.length; k++) {
         }
-        //System.out.println("coucou");
-        for(int j=0;j<5;j++){
-            somme+=L[j];
-            //System.out.println(somme);
+        for (int j = 0; j < 5; j++) {
+            somme += L[j];
         }
-        //System.out.println(somme);
         return somme;
     }
-    
-    public static boolean est_vide(Terrain[] plateau, int i){ // regarde si la case i est vide
+
+    public static boolean est_vide(Terrain[] plateau, int i) { // regarde si la case i est vide
         return plateau[i].estVide();
     }
-    
-    
-   public static boolean est_village(Terrain[] plateau, int i){ // regarde si la case i est vide
+
+    public static boolean est_village(Terrain[] plateau, int i) { // regarde si la case i est un village
         return plateau[i].getVillage();
     }
-   
-   
-   public static boolean estVoisinDe(Terrain[] plateau, int index1,int index2){
-    if (index1==index2){
+
+    public static boolean estVoisinDe(Terrain[] plateau, int index1, int index2) { // vérifie si une terrain est voisin d'un autre
+        if (index1 == index2) {
+            return false;
+        }
+        int nbvoisins = plateau[index1].getNbVoisins();// on compte les voisins du territoire index1
+        for (int i = 0; i < nbvoisins; i++) { // on parcourt les voisins du territoire index1
+            int idVoisin = plateau[index1].getVoisin(i);
+            if (idVoisin == index2) {
+                return true;
+            }
+        }
         return false;
     }
-    int nbvoisins=plateau[index1].getNbVoisins();// on compte les voisins du territoire index1
-    for (int i=0;i<nbvoisins;i++){ // on parcourt les voisins du territoire index1
-        int idVoisin=plateau[index1].getVoisin(i);
-        if(idVoisin==index2){
-            return true;
-        }
-    }
-    return false;
-    }
-   
-    public static boolean coupValide(Terrain[] plateau,int _source, int _dest) {
-        
-        if(estVoisinDe(plateau,_source,_dest)){
-            if(plateau[_source].estVide()==false){
-                if(plateau[_dest].estVide()==false){
-                    if(plateau[_source].estBloque()){
-                        if(plateau[_dest].estBloque()){
-                            if(plateau[_source].getNbCabane()>=plateau[_dest].getNbCabane()){
+
+    public static boolean coupValide(Terrain[] plateau, int _source, int _dest) { // vérifie si un coup est valide 
+
+        if (estVoisinDe(plateau, _source, _dest)) {
+            if (plateau[_source].estVide() == false) {
+                if (plateau[_dest].estVide() == false) {
+                    if (plateau[_source].estBloque()) {
+                        if (plateau[_dest].estBloque()) {
+                            if (plateau[_source].getNbCabane() >= plateau[_dest].getNbCabane()) {
                                 return true;
                             }
-                        }                  
-                    }
-                    else{
+                        }
+                    } else {
                         return true;
                     }
-                }  
+                }
             }
-        }  
-    
-    return false;
+        }
+
+        return false;
     }
-    
-    public static String type(Terrain[] plateau, int i){
+
+    public static String type(Terrain[] plateau, int i) { //retourne le type d'un terrain
         return plateau[i].getType();
     }
-    
-    
-    public int nbVillagePossible(Terrain [] _plateau){
-        int nbChoix= getNbSourceValide(_plateau);                          //on récupère le nb de source valide
-        int[] listeSource= getSource(_plateau);                           //on récupère la liste de source valide
-        int i,res = 0;
 
-        for(i=0;i<nbChoix;i++){                           //on compte le nombre de village créable ce tour ci
-                   //on évite de faire tourner l'algorithme si ça ne créé pas de village
-                res += Tools.nbVillageCreeSi(_plateau, listeSource[i]);
+    public int nbVillagePossible(Terrain[] _plateau) { // retourne le nb de villages qu'il est possible de créer
+        int nbChoix = getNbSourceValide(_plateau);                          //on récupère le nb de source valide
+        int[] listeSource = getSource(_plateau);                           //on récupère la liste de source valide
+        int i, res = 0;
 
+        for (i = 0; i < nbChoix; i++) {                           //on compte le nombre de village créable ce tour ci
+            //on évite de faire tourner l'algorithme si ça ne créé pas de village
+            res += Tools.nbVillageCreeSi(_plateau, listeSource[i]);
         }
-    return res;
-}
+        return res;
+    }
 
     /**
      * @param _plateau
@@ -354,12 +353,12 @@ public class Tools {
      * @param _myScore
      * @return return l'index de l'adversaire le plus fort en points
      */
-    public static int worseOpp (Terrain [] _plateau, int _myColor, int [] _colorScore, int _myScore){
-        int i,res;
-        res = (_myColor+1)%5;
-        for (i=0;i<4;i++){
-            if( _myColor!=i){
-                if(_colorScore[i]>= _colorScore[res]){
+    public static int worseOpp(Terrain[] _plateau, int _myColor, int[] _colorScore, int _myScore) { // retourne la couleur de l'opposant avec le plus gros score
+        int i, res;
+        res = (_myColor + 1) % 5;
+        for (i = 0; i < 4; i++) {
+            if (_myColor != i) {
+                if (_colorScore[i] >= _colorScore[res]) {
                     res = i;
                 }
             }
@@ -367,181 +366,169 @@ public class Tools {
 
         return res;
     }
-    
-    public static int suppOpp (Terrain[] _plateau,int _myColor, int [] _opponentVillages,int _myScore){
+
+    public static int suppOpp(Terrain[] _plateau, int _myColor, int[] _opponentVillages, int _myScore) { // retourne la couleur de l'adversaire supposé
         int[] score = new int[5];
-        int i,j;
-        for(i=0;i<_opponentVillages.length;i++){
-            for(j=0;j<5;j++){
-                if(_plateau[_opponentVillages[i]].getCabanes(j)>0){
-                score[j] += _plateau[_opponentVillages[i]].getNbCabane();
+        int i, j;
+        for (i = 0; i < _opponentVillages.length; i++) {
+            for (j = 0; j < 5; j++) {
+                if (_plateau[_opponentVillages[i]].getCabanes(j) > 0) {
+                    score[j] += _plateau[_opponentVillages[i]].getNbCabane();
                 }
             }
 
         }
 
-        return worseOpp ( _plateau,_myColor,score,_myScore);
+        return worseOpp(_plateau, _myColor, score, _myScore);
     }
-    
-    public static int[] getSrcDispo(Terrain[] plateau) {
-        
+
+    public static int[] getSrcDispo(Terrain[] plateau) { // retourne la liste des sources disponibles
+
         int[] src = getSource(plateau);
-        int compteur=0;
-        int index=0;
-       
+        int compteur = 0;
+        int index = 0;
+
         for (int i = 0; i < src.length; i++) {
             if (getNbVoisinsNonVide(plateau, src[i]) == 2) {
-                compteur+=1;
+                compteur += 1;
             }
         }
-        if (compteur==0){
+        if (compteur == 0) {
             return src;
-        }
-        else{
-            int n=src.length-compteur;
+        } else {
+            int n = src.length - compteur;
             int[] res = new int[n];
             for (int i = 0; i < src.length; i++) {
                 if (getNbVoisinsNonVide(plateau, src[i]) != 2) {
-                    res[index]=src[i];
-                    index+=1;
+                    res[index] = src[i];
+                    index += 1;
 
                 }
             }
-             return res;
+            return res;
         }
-       
-       
+
     }
-    
-     public static int fact (int n) {
-        if (n==0) return(1);
-        else return(n*fact(n-1));
+
+    public static int fact(int n) { // fonction factorielle
+        if (n == 0) {
+            return (1);
+        } else {
+            return (n * fact(n - 1));
+        }
     }
-    
-    public static int[][] combinaisons(int[] L){
-        int n=L.length;
-        int compteur=0;
+
+    public static int[][] combinaisons(int[] L) { // retourne l'ensemble des combinaisons qu'il est possible de créer à partir d'une liste
+        int n = L.length;
+        int compteur = 0;
         int[][] tableau = new int[fact(n)][n];
         Random rand = new Random();
-        while (compteur<fact(n)){
-            int [] t = L.clone();
-            int a,tmp;
+        while (compteur < fact(n)) {
+            int[] t = L.clone();
+            int a, tmp;
             // on melange le tableau des villages
-            for (int i=0; i<t.length; i++){
-                a=rand.nextInt(t.length);
-                tmp=t[a];
-                t[a]=t[i];
-                t[i]=tmp;
+            for (int i = 0; i < t.length; i++) {
+                a = rand.nextInt(t.length);
+                tmp = t[a];
+                t[a] = t[i];
+                t[i] = tmp;
             }
-            boolean pas_dedans=true;
-            for(int i = 0 ; i<tableau.length;i++){
-                if(Arrays.equals(t, tableau[i])){
-                    pas_dedans=false;
-                    }
-            }   
-            if (pas_dedans){
-                tableau[compteur]=t;
-                compteur=compteur+1;
+            boolean pas_dedans = true;
+            for (int i = 0; i < tableau.length; i++) {
+                if (Arrays.equals(t, tableau[i])) {
+                    pas_dedans = false;
+                }
             }
-            
+            if (pas_dedans) {
+                tableau[compteur] = t;
+                compteur = compteur + 1;
+            }
+
         }
         return tableau;
     }
-    public static int max(int[] L){
-        int max=0;
-        for (int i=0;i<L.length;i++){
-            if (L[i]>=max){
-                max=L[i];
+
+    public static boolean appartient(Terrain[] _plateau, int color, int index) { // regarde si une couleur appartient à un territoire
+
+        if (_plateau[index].getCabanes()[color] != 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean cinqCouleurs(int[] _cabanes) { // regarde si les 5 couleurs sont présentes 
+        boolean res = true;
+        for (int i = 0; i < 5; i++) {
+            if (_cabanes[i] == 0) {
+                res = false;
             }
         }
-        return max;
-    }
-    
-     public static boolean appartient (Terrain [] _plateau, int _myColor, int index){
-
-            
-            if (_plateau[index].getCabanes()[_myColor]!=0){
-                return true;
-            }
-            return false;
-    }
-     
-     public static boolean cinqCouleurs(int[] _cabanes){
-        boolean res=true;
-        for(int i=0; i<5; i++)
-            if(_cabanes[i]==0)
-                res=false;
         return res;
     }
-     
-    public static int [] destru(Terrain[] _plateau, int _myColor, int[] _colorScore, int _myScore, int _opponentScore, int[] _opponentMov, int[] _opponentVillages, int nb){
+
+    public static int[] destru(Terrain[] _plateau, int _myColor, int[] _colorScore, int _myScore, int _opponentScore, int[] _opponentMov, int[] _opponentVillages, int nb) { // fonction ayant pour vocation de détruire un maximum de pions ennemis
         boolean present = false;
-        int t=-1;
+        int t = -1;
         int max = -1;
-        int[] imax ={ -1,-1};
-        
-        int[] srcDisp = getSource( _plateau);
-        for (int i =0;i<srcDisp.length;i++){
-            int [] villagecree = listeVillagesCreesSi( _plateau,srcDisp[i]);
-            for (int j = 0;j < villagecree.length;j++){
-                if(getNbVoisinDispo(_plateau,villagecree[j]) == 1 && malus[nb]==_plateau[villagecree[j]].getType()){
-                    if (max == -1){
-                        t =0;
-                        max = pnts_pot(_plateau,srcDisp[i],villagecree[j]);
+        int[] imax = {-1, -1};
+
+        int[] srcDisp = getSource(_plateau);
+        for (int i = 0; i < srcDisp.length; i++) {
+            int[] villagecree = listeVillagesCreesSi(_plateau, srcDisp[i]);
+            for (int j = 0; j < villagecree.length; j++) {
+                if (getNbVoisinDispo(_plateau, villagecree[j]) == 1 && malus[nb] == _plateau[villagecree[j]].getType()) {
+                    if (max == -1) {
+                        t = 0;
+                        max = pnts_pot(_plateau, srcDisp[i], villagecree[j]);
                         imax[0] = srcDisp[i];
                         imax[1] = villagecree[j];
-                        
-                        present =(!(_plateau[villagecree[j]].getCabanes().clone()[_myColor]>0) && !( _plateau[srcDisp[i]].getCabanes().clone()[_myColor]>0 ));
-                                
-                    }else{
-                        boolean present_tempo = (!(_plateau[villagecree[j]].getCabanes().clone()[_myColor]>0) && !( _plateau[srcDisp[i]].getCabanes().clone()[_myColor]>0 ));
-                        
-                        if (present == true && present_tempo == false && t == 0){
+
+                        present = (!(_plateau[villagecree[j]].getCabanes().clone()[_myColor] > 0) && !(_plateau[srcDisp[i]].getCabanes().clone()[_myColor] > 0));
+
+                    } else {
+                        boolean present_tempo = (!(_plateau[villagecree[j]].getCabanes().clone()[_myColor] > 0) && !(_plateau[srcDisp[i]].getCabanes().clone()[_myColor] > 0));
+
+                        if (present == true && present_tempo == false && t == 0) {
                             imax[0] = srcDisp[i];
-                            imax[1] = villagecree[j]; 
+                            imax[1] = villagecree[j];
                             present = present_tempo;
-                        }else{
-                            if (max < pnts_pot(_plateau,srcDisp[i],villagecree[j])){
+                        } else {
+                            if (max < pnts_pot(_plateau, srcDisp[i], villagecree[j])) {
                                 imax[0] = srcDisp[i];
-                                imax[1] = villagecree[j]; 
+                                imax[1] = villagecree[j];
                                 present = present_tempo;
                             }
                         }
                     }
-                    
-                   
+
                 }
             }
         }
-        
-        
+
         return imax;
-        
+
     }
-    
-    public static int pnts_pot(Terrain[] _plateau,int src,int dest){
+
+    public static int pnts_pot(Terrain[] _plateau, int src, int dest) { //potentiel brut que rapporterait un terrain sans les bonus
         int res = -1;
-        int[] cabanes =_plateau[dest].getCabanes().clone();
-        for (int i =0; i <5;i++){
+        int[] cabanes = _plateau[dest].getCabanes().clone();
+        for (int i = 0; i < 5; i++) {
             cabanes[i] += _plateau[src].getCabanes().clone()[i];
         }
-        
-        if (cinqCouleurs(cabanes)){
-            for (int i =0; i <5;i++){
-                if (cabanes[i] >1){
-                    res+=cabanes[i];
-                }                
+
+        if (cinqCouleurs(cabanes)) {
+            for (int i = 0; i < 5; i++) {
+                if (cabanes[i] > 1) {
+                    res += cabanes[i];
+                }
             }
-        }else {
-            for (int i =0; i <5;i++){
-                if (cabanes[i] >1){
-                    res+=cabanes[i];
-                }                
+        } else {
+            for (int i = 0; i < 5; i++) {
+                if (cabanes[i] > 1) {
+                    res += cabanes[i];
+                }
             }
         }
         return res;
     }
 }
-
-
-

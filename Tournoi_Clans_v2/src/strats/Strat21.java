@@ -48,7 +48,7 @@ public class Strat21 implements Strategie {
             return destruction;
         }
         
-        /*
+        
         int compteur=0;
         /////////////////
         // méthode qui va décider quoi faire tant que le premier village n'est pas créé
@@ -103,7 +103,7 @@ public class Strat21 implements Strategie {
                 }
             }
         }
-        */
+        
         
         int max = 0; // variable permettant de stocker le nombre de points maximal que pourrait rapporter un potentiel mouvement
         for (int i = 0; i < sources.length; i++) {
@@ -141,7 +141,7 @@ public class Strat21 implements Strategie {
                             }
 
                         }
-                    } else { //sinon on essaye de créer un village en rentrant les voisins dans ce territoire et ainsi on marque plus de points car il y a plus de cabanes
+                    } else { //sinon on essaye de créer un village en rentrant les voisins dans ce territoire et ainsi on marque plus de points car il y a plus de cabanes dans ce territoire favorable
                         res[0] = vois1[j];
                         res[1] = sources[i];
                         if (Tools.coupValide(_plateau, res[0], res[1])) {
@@ -153,12 +153,12 @@ public class Strat21 implements Strategie {
             }
         }
         
-        /*
+        
          for (int i = 0; i < sources.length; i++) {
-            if ((Tools.cabanes_i(_plateau, sources[i])[_myColor] == 0) && (Tools.type(_plateau, sources[i]).equals(malus))) { //On regarde si on a au moins 2 pions dans un territoire favorable
+            if ((Tools.cabanes_i(_plateau, sources[i])[_myColor] == 0) && (Tools.type(_plateau, sources[i]).equals(malus))) { //On regarde si 0 pions dans un territoire défavorable
                 int[] vois1 = Tools.getVoisinsDispo(_plateau, sources[i]);
                 for (int j = 0; j < vois1.length; j++) {
-                    if (Tools.appartient(_plateau, suppOpp, vois1[j])) { // si notre adversaire supposé est voisin de ce territoire, on va essayer de l'éloigner de ce territoire pour qu'il ne marque pas de points
+                    if (Tools.appartient(_plateau, _myColor, vois1[j])) { // si on est voisin de ce territoire défavorable, on va essayer de s'éloigner de ce territoire 
                         int n = Tools.getNbVoisinDispo(_plateau, vois1[j]);
                         if (n > 0) {
                             int[] vois2 = Tools.getVoisinsDispo(_plateau, vois1[j]);
@@ -169,7 +169,7 @@ public class Strat21 implements Strategie {
                             }
 
                         }
-                    } else { //sinon on essaye de créer un village en rentrant les voisins dans ce territoire et ainsi on marque plus de points car il y a plus de cabanes
+                    } else { //sinon on essaye de créer un village en rentrant les voisins dans ce territoire et ainsi on élimine des pions adverses
                         res[0] = vois1[j];
                         res[1] = sources[i];
                         if (Tools.coupValide(_plateau, res[0], res[1])) {
@@ -181,7 +181,7 @@ public class Strat21 implements Strategie {
             }
         }
         
-        */
+        
 
         // si jamais on est pas dans les conditions précèdentes on va jouer un coup aléatoire
         

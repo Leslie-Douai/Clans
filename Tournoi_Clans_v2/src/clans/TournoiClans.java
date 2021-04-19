@@ -16,7 +16,7 @@ public class TournoiClans {
         //combatSimple(8, 8);
         
         // lance un nombre defini de parties (troisieme parametres) entre deux strategies dont vous donnez le numero (deux premiers parametres)
-        combatMultiples(3, 21, 1000);
+        combatMultiples(9, 21, 1000);
 
         // Tournoi a 10000 parties par duels avec les strategies du tableau suivant:
         // Strategies des enseignants : 1, 2, 6 et 8. Attention 8 est tres gourmande en calcul donc limiter le nombre de parties...
