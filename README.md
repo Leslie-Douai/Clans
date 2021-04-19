@@ -22,9 +22,7 @@
 #### 
 #### A partir de la ligne 261, on rerouve les fonctions que nous avons codées, ces fonctions se comprennent avec leurs noms et le court commentaire associé.
 
-#### 
-#### nos pourcentages de victoires :
-#### 
+
 
 ### Groupe: 1
 ### Équipe: 
