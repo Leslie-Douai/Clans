@@ -492,7 +492,74 @@ public class Tools {
         }
         return res;
     }
-}
-
+    
+    public int[] nbVillageCreable(Terrain[] _plateau){
+        int[] res = {-1,-1,0};
+        
+        int[] srcDisp = getSource( _plateau);
+        for (int i =0;i<srcDisp.length;i++){
+            if(listeVillagesCreesSi( _plateau,srcDisp[i]).length > res[0]){
+                res[0] = listeVillagesCreesSi( _plateau,srcDisp[i]).length;
+                res[1] = srcDisp[i];
+            }
+        }
+        
+        for (int i =0;i<srcDisp.length;i++){
+            if(listeVillagesCreesSi( _plateau,srcDisp[i]).length == res[0]){
+                res[2] ++;
+                
+            }
+        }
+        
+        
+            
+        return res;
+    }        
+    
+    public int[] finalCoup(Terrain[] _plateau, int _myColor, int[] _colorScore, int _myScore, int _opponentScore, int[] _opponentMov, int[] _opponentVillages,int nb){
+        int res[] = {-1,-1};
+            int[] nbCreable = nbVillageCreable(_plateau);
+            if (nb + nbCreable[0] > 11){
+                
+                    int[] sources = new int[nbCreable[2]];
+                    int k=0;
+                    int[] srcDisp = getSource( _plateau);
+                    for (int i =0;i<srcDisp.length;i++){
+                        if(listeVillagesCreesSi( _plateau,srcDisp[i]).length == nbCreable[0]){
+                            sources[k] = srcDisp[i];
+                            k ++;
+                        }
+                    }
+                    
+                    int max = 0; // variable permettant de stocker le nombre de points maximal que pourrait rapporter un potentiel mouvement
+                    for (int i = 0; i < sources.length; i++) {
+                        int[] villages_si = Tools.listeVillagesCreesSi(_plateau, sources[i]);
+                        if (villages_si.length != 0) {
+                            int[] destinations = Tools.getVoisinsDispo(_plateau, sources[i]);
+                            for (int j = 0; j < destinations.length; j++) {
+                                int[] gains = Tools.evaluerGain(_plateau, sources[i], destinations[j],ordre(villages_si)); // on évalue les potentiels gains de chaque couleur en jouant depuis la source i vers la destination j en suivant un ordre prècis dans le cas où on créerait plusieurs villages simultanément
+                                if (gains[_myColor] >= max) {
+                                    int suppOpp = Tools.suppOpp(_plateau, _myColor, _opponentVillages, _myScore);
+                                    if (gains[suppOpp] <= gains[_myColor]) {  // si le joueur que l'on suppose être notre ennemi gagne plus de points que nous sur ce coup là que nous on joue pas
+                                        max = gains[_myColor];
+                                        res[0] = sources[i];
+                                        res[1] = destinations[j];
+                                    }
+                                }
+                            }
+                            if (Tools.coupValide(_plateau, res[0], res[1])) {
+                                return res;
+                            }
+                        }
+                    }
+                }
+            
+             return res;
+            }
+        
+        
+        }
+        
+    
 
 
