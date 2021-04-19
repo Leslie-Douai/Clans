@@ -42,14 +42,13 @@ public class Strat21 implements Strategie {
         String malus = Tools.malus[nb]; //terrain qui rapporte un malus au moment du mouvement
         int suppOpp = Tools.suppOpp(_plateau, _myColor, _opponentVillages, _myScore); // couleur de l'adversaire supposé
         int[] sources = Tools.getSource(_plateau); //liste des sources disponibles
-        
-        int[] destruction = Tools.destru( _plateau, _myColor,_colorScore, _myScore, _opponentScore, _opponentMov, _opponentVillages, nb);
-        if (destruction[0] != -1){
+
+        int[] destruction = Tools.destru(_plateau, _myColor, _colorScore, _myScore, _opponentScore, _opponentMov, _opponentVillages, nb);
+        if (destruction[0] != -1) {
             return destruction;
         }
-        
-        
-        int compteur=0;
+
+        int compteur = 0;
         /////////////////
         // méthode qui va décider quoi faire tant que le premier village n'est pas créé
         // si le nombre de villages créés est 0 et on a un pion en case 19 ou en case 50
@@ -104,7 +103,46 @@ public class Strat21 implements Strategie {
             }
         }
         
-        
+        int[] nbCreable = Tools.nbVillageCreable(_plateau);
+        if (nb + nbCreable[0] > 11){
+                
+                    int[] sources1 = new int[nbCreable[2]];
+                    int k=0;
+                    int[] srcDisp = Tools.getSource( _plateau);
+                    for (int i =0;i<srcDisp.length;i++){
+                        if(Tools.listeVillagesCreesSi( _plateau,srcDisp[i]).length == nbCreable[0]){
+                            sources1[k] = srcDisp[i];
+                            k ++;
+                        }
+                    }
+                    
+                    int max = 0; // variable permettant de stocker le nombre de points maximal que pourrait rapporter un potentiel mouvement
+                    for (int i = 0; i < sources1.length; i++) {
+                        int[] villages_si = Tools.listeVillagesCreesSi(_plateau, sources1[i]);
+                        if (villages_si.length != 0) {
+                            int[] destinations = Tools.getVoisinsDispo(_plateau, sources1[i]);
+                            for (int j = 0; j < destinations.length; j++) {
+                                int[] gains = Tools.evaluerGain(_plateau, sources1[i], destinations[j], ordre(villages_si)); // on évalue les potentiels gains de chaque couleur en jouant depuis la source i vers la destination j en suivant un ordre prècis dans le cas où on créerait plusieurs villages simultanément
+                                if (gains[_myColor] >= max) {
+                                   
+                                    if (gains[suppOpp] <= gains[_myColor]) {  // si le joueur que l'on suppose être notre ennemi gagne plus de points que nous sur ce coup là que nous on joue pas
+                                        max = gains[_myColor];
+                                        res[0] = sources1[i];
+                                        res[1] = destinations[j];
+                                    }
+                                }
+                            }
+                            if (Tools.coupValide(_plateau, res[0], res[1])) {
+                                return res;
+                            }
+                        }
+                    }
+                }
+            
+             
+    
+            
+
         int max = 0; // variable permettant de stocker le nombre de points maximal que pourrait rapporter un potentiel mouvement
         for (int i = 0; i < sources.length; i++) {
             int[] villages_si = Tools.listeVillagesCreesSi(_plateau, sources[i]);
@@ -125,7 +163,7 @@ public class Strat21 implements Strategie {
                 }
             }
         }
-        
+
         for (int i = 0; i < sources.length; i++) {
             if ((Tools.cabanes_i(_plateau, sources[i])[_myColor] >= 1) && (Tools.type(_plateau, sources[i]).equals(bonus))) { //On regarde si on a au moins 2 pions dans un territoire favorable
                 int[] vois1 = Tools.getVoisinsDispo(_plateau, sources[i]);
@@ -152,9 +190,8 @@ public class Strat21 implements Strategie {
                 }
             }
         }
-        
-        
-         for (int i = 0; i < sources.length; i++) {
+
+        for (int i = 0; i < sources.length; i++) {
             if ((Tools.cabanes_i(_plateau, sources[i])[_myColor] == 0) && (Tools.type(_plateau, sources[i]).equals(malus))) { //On regarde si 0 pions dans un territoire défavorable
                 int[] vois1 = Tools.getVoisinsDispo(_plateau, sources[i]);
                 for (int j = 0; j < vois1.length; j++) {
@@ -180,11 +217,8 @@ public class Strat21 implements Strategie {
                 }
             }
         }
-        
-        
 
         // si jamais on est pas dans les conditions précèdentes on va jouer un coup aléatoire
-        
         int nbChoix = Tools.getNbSourceValide(_plateau);                          //on récupère le nb de source valide     
         int src = Tools.getSource(_plateau)[rand.nextInt(nbChoix)];               //on en tire une aléatoirement      
         int nbVoisin = Tools.getNbVoisinDispo(_plateau, src);                       //on récupère le nb de voisins de la source
@@ -198,66 +232,66 @@ public class Strat21 implements Strategie {
 
     @Override
     public int[] ordre(int[] _villages) {
-        
-        int nbvillage = Tools.countVillage(plateau); // nombre de villages créés
-        if (_villages.length>1 && nbvillage<9 ){
-            int[][] combinaison_villages = Tools.combinaisons(_villages); // liste de tte les combinaisons pouvant être faites avec les villages
-            int[] points = new int[combinaison_villages.length];   // liste des points que rapporte chaque combinaison
-            for (int i = 0; i < combinaison_villages.length; i++) { // on parcourt l'ensemble des combinaisons
-                int[] combinaison_i = combinaison_villages[i]; // on stock ici la combinaison i
-                String[] bonus = new String[combinaison_i.length+4]; // on crée la liste des bonus associés à la combinaison i
-                String[] malus = new String[combinaison_i.length+4]; // on crée la liste des malus associés à la combinaison i
-                
-            
-                for (int j = 0; j < combinaison_i.length; j++) { // on parcourt la combinaison i
-                    bonus[j] = Tools.bonus[nbvillage + j]; // on remplit ces listes
-                    malus[j] = Tools.malus[nbvillage + j];
-                    
-                }
-                for (int j = 0; j < combinaison_i.length; j++) {
-                    int[] cabanes = Tools.cabanes_i(plateau, combinaison_i[j]); // on récupère la liste des cabanes du village j de la combinaison i 
-                    int opp = Tools.suppOpp(plateau, mycolor, colorscore, myscore); // on récupère l'ennemi présumè
-                    int nb_pions_moi = cabanes[mycolor]; // on récupère nos pions
-                    int nb_pions_ennemi = cabanes[opp]; // on récupère les pions de l'enemi
-                    if (Tools.type(plateau, combinaison_i[j]).equals(bonus[j])) {
-                        if (nb_pions_moi >= 2) {
-                            points[i] += 1;
-                        }
-                    }
-                    
-                    if (Tools.type(plateau, combinaison_i[j]).equals(malus[i])) {
 
-                        if (nb_pions_moi <= 1 || nb_pions_ennemi >= 2) {
-                            points[i] += 1;
-                        }
+        int nbvillage = Tools.countVillage(plateau); // nombre de villages créés
+        if (_villages.length > 1&&nbvillage < 9) {
+                int[][] combinaison_villages = Tools.combinaisons(_villages); // liste de tte les combinaisons pouvant être faites avec les villages
+                int[] points = new int[combinaison_villages.length];   // liste des points que rapporte chaque combinaison
+                for (int i = 0; i < combinaison_villages.length; i++) { // on parcourt l'ensemble des combinaisons
+                    int[] combinaison_i = combinaison_villages[i]; // on stock ici la combinaison i
+                    String[] bonus = new String[combinaison_i.length]; // on crée la liste des bonus associés à la combinaison i
+                    String[] malus = new String[combinaison_i.length]; // on crée la liste des malus associés à la combinaison i
+                    for (int j = 0; j < combinaison_i.length; j++) { // on parcourt la combinaison i
+                        bonus[j] = Tools.bonus[nbvillage + j]; // on remplit ces listes
+                        malus[j] = Tools.malus[nbvillage + j];
+
                     }
-               
+                    for (int j = 0; j < combinaison_i.length; j++) {
+                        int[] cabanes = Tools.cabanes_i(plateau, combinaison_i[j]); // on récupère la liste des cabanes du village j de la combinaison i 
+                        int opp = Tools.suppOpp(plateau, mycolor, colorscore, myscore); // on récupère l'ennemi présumè
+                        int nb_pions_moi = cabanes[mycolor]; // on récupère nos pions
+                        int nb_pions_ennemi = cabanes[opp]; // on récupère les pions de l'enemi
+                        if (Tools.type(plateau, combinaison_i[j]).equals(bonus[j])) {
+                            if (nb_pions_moi >= 2) {
+                                points[i] += 1;
+                            }
+                        }
+
+                        if (Tools.type(plateau, combinaison_i[j]).equals(malus[i])) {
+
+                            if (nb_pions_moi <= 1 || nb_pions_ennemi >= 2) {
+                                points[i] += 1;
+                            }
+                        }
+
+                    }
                 }
-            }
-            int max=0;
-            int index=0;
-            for (int i = 0; i < points.length; i++) {
-                if (points[i]>=max){
-                    max=points[i];
-                    index=i;
+                int max = 0;
+                int index = 0;
+                for (int i = 0; i < points.length; i++) {
+                    if (points[i] >= max) {
+                        max = points[i];
+                        index = i;
+                    }
                 }
+                return combinaison_villages[index];
+
+           
+        } 
+        
+
+            Random rand = new Random();
+            int a, tmp;
+            // on melange le tableau des villages
+            for (int i = 0; i < _villages.length; i++) {
+                a = rand.nextInt(_villages.length);
+                tmp = _villages[a];
+                _villages[a] = _villages[i];
+                _villages[i] = tmp;
             }
-            return combinaison_villages[index];
-        }
-        else {
-         
-        Random rand = new Random();
-        int a, tmp;
-        // on melange le tableau des villages
-        for (int i = 0; i < _villages.length; i++) {
-            a = rand.nextInt(_villages.length);
-            tmp = _villages[a];
-            _villages[a] = _villages[i];
-            _villages[i] = tmp;
-        }
-        //on retourne le tableau mélangé
-        return _villages;
-    }
+            //on retourne le tableau mélangé
+            return _villages;
+        
     }
 
     public String getName() {
