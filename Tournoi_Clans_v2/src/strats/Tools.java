@@ -530,29 +530,27 @@ public class Tools {
             }
         }
         return res;
-        
-        
+
     }
-    public static int[] nbVillageCreable(Terrain[] _plateau){
-        int[] res = {-1,-1,0};
-        
-        int[] srcDisp = getSource( _plateau);
-        for (int i =0;i<srcDisp.length;i++){
-            if(listeVillagesCreesSi( _plateau,srcDisp[i]).length > res[0]){
-                res[0] = listeVillagesCreesSi( _plateau,srcDisp[i]).length;
+
+    public static int[] nbVillageCreable(Terrain[] _plateau) {
+        int[] res = {-1, -1, 0};
+
+        int[] srcDisp = getSource(_plateau);
+        for (int i = 0; i < srcDisp.length; i++) {
+            if (listeVillagesCreesSi(_plateau, srcDisp[i]).length > res[0]) {
+                res[0] = listeVillagesCreesSi(_plateau, srcDisp[i]).length;
                 res[1] = srcDisp[i];
             }
         }
-        
-        for (int i =0;i<srcDisp.length;i++){
-            if(listeVillagesCreesSi( _plateau,srcDisp[i]).length == res[0]){
-                res[2] ++;
-                
+
+        for (int i = 0; i < srcDisp.length; i++) {
+            if (listeVillagesCreesSi(_plateau, srcDisp[i]).length == res[0]) {
+                res[2]++;
+
             }
         }
-        
-        
-            
+
         return res;
-    }      
+    }
 }
