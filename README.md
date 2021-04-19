@@ -6,7 +6,9 @@
 #### 
 
 #### D'autres méthodes ont été crées et testées (empecher de jouer un coup offrant un village à l'adversaire, essayer de répéter un schéma de jeu plutot qu'un coup random...) mais on obtient de meilleurs résultats sans les utiliser.
-
+#### 
+#### Dans stratégie :
+#### 
 #### De la ligne 46 à 49, on regarde si on peut détruire un village, cela nous avantage car nous gagnons le point de création du village.
 #### De la ligne 52 à 105, on a le code permettant d'appliquer un schéma tout fait au début de la partie, ce code est en commentaire car les résultats obtenus sont moins bon avec.
 #### De la ligne 108 à 127 c'est le bloc principal de notre stratégie , on regarde tous les coups possibles et si l'un d'entre eux nous avantage par rapport à la couleur que l'on suppose être notre opposant, on le joue
@@ -15,6 +17,14 @@
 #### De la ligne 188 à 196 si on est dans aucun des cas précent, on joue un coup aléatoire
 #### De la ligne 200 à 248 on fait une liste de toutes les manières d'ordonner les villages, on établit une liste de points que rapporte chaque combinaison, ces points sont basés sur nos critères
 #### De la ligne 249 à 261 sinon on joue un code aléatoire
+#### 
+#### Dans Tools
+#### 
+#### A partir de la ligne 261, on rerouve les fonctions que nous avons codées, ces fonctions se comprennent avec leurs noms et le court commentaire associé.
+
+#### 
+#### nos pourcentages de victoires :
+#### 
 
 ### Groupe: 1
 ### Équipe: 
