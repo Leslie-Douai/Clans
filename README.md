@@ -25,7 +25,7 @@
 
 
 ### Voici les fonctions que nous avons rajoutées dans Tools.
-
+-
      * @param plateau
      * @param i
      * @return la liste des cabanes dans la case i     
