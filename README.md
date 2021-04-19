@@ -24,6 +24,116 @@
 #### A partir de la ligne 261, on rerouve les fonctions que nous avons codées, ces fonctions se comprennent avec leurs noms et le court commentaire associé.
 
 
+### Voici les fonctions que nous avons rajoutées dans Tools.
+
+     * @param plateau
+     * @param i
+     * @return la liste des cabanes dans la case i     
+- public static int[] cabanes_i(Terrain[] plateau, int i)
+    
+     * @param plateau
+     * @param i
+     * @return le nb de cabanes dans la case i
+- public static int nbpions_i(Terrain[] plateau, int i)
+    
+     * @param plateau
+     * @param i
+     * @return si la case i est vide
+- public static boolean est_vide(Terrain[] plateau, int i)
+    
+     * @param plateau
+     * @param i
+     * @return si la case i est un village
+- public static boolean est_village(Terrain[] plateau, int i)
+    
+     * @param plateau
+     * @param index1
+     * @param index2
+     * @return si la case index1 et index2 sont voisines
+- public static boolean estVoisinDe(Terrain[] plateau, int index1,int index2){
+   
+     * @param plateau
+     * @param _source
+     * @param _dest
+     * @return si le déplacement de _source à _dest est valide
+- public static boolean coupValide(Terrain[] plateau,int _source, int _dest) {
+    
+     * @param plateau
+     * @param i
+     * @return le type de terrain de la case i
+- public static String type(Terrain[] plateau, int i){
+
+     * @param _plateau
+     * @return le nombre de village possible
+- public int nbVillagePossible(Terrain [] _plateau){
+    
+     * @param _plateau
+     * @param _myColor
+     * @param _colorScore
+     * @param _myScore
+     * @return return l'index de l'adversaire le plus fort en points
+- public static int worseOpp (Terrain [] _plateau, int _myColor, int [] _colorScore, int _myScore){
+    
+     * @param _plateau
+     * @param _myColor
+     * @param _opponentVillages
+     * @param _myScore
+     * @return return l'index de l'adversaire qui à marqué le plus de point au tour précédent
+- public static int suppOpp (Terrain[] _plateau,int _myColor, int [] _opponentVillages,int _myScore){
+
+     * @param _plateau
+     * @param _myColor
+     * @param _opponentVillages
+     * @param _myScore
+     * @return return l'index de l'adversaire qui à marqué le plus de point au tour précédent
+- public static int[] getSrcDispo(Terrain[] plateau) {
+    
+     * @param n
+     * @return return factoriel n  
+- public static int fact (int n) {
+    
+     * @param n
+     * @return return les combinaisons possibles 
+- public static int[][] combinaisons(int[] L){
+
+     * @param _plateau
+     * @param _myColor
+     * @param index
+     * @return return si une couleur est sur un territoire
+- public static boolean appartient (Terrain [] _plateau, int _myColor, int index){
+
+     * @param _cabanes
+     * @return si les 5 couleurs sont dans la liste des cabanes
+- public static boolean cinqCouleurs(int[] _cabanes){
+
+     * @param _plateau
+     * @param _myColor
+     * @param _colorScore
+     * @param _myScore
+     * @param _opponentScore
+     * @param _opponentMov
+     * @param _opponentVillages
+     * @param nb
+     * @return le couple source destination détruisant un maximum de pions ennemis si possible
+- public static int [] destru(Terrain[] _plateau, int _myColor, int[] _colorScore, int _myScore, int _opponentScore, int[] _opponentMov, int[] _opponentVillages,int nb){
+    
+    
+     * @param _plateau
+     * @param  dest
+     * @param src
+     * @return le potentiel de point de la case sans bonus terrain mais hutte 
+- public static int pnts_pot(Terrain[] _plateau,int src,int dest){
+
+    * @param _plateau
+     * @param _myColor
+     * @param _colorScore
+     * @param _myScore
+     * @param _opponentScore
+     * @param _opponentMov
+     * @param _opponentVillages
+     * @param nb
+     * @return le meilleur coup pour finir la partie ou {-1,-1} si on ne peut pas finir la partie
+- public int[] finalCoup(Terrain[] _plateau, int _myColor, int[] _colorScore, int _myScore, int _opponentScore, int[] _opponentMov, int[] 
 
 ### Groupe: 1
 ### Équipe: 
